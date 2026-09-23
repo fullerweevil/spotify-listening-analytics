@@ -17,7 +17,8 @@ def init_db():
             track_name TEXT,
             artist_name TEXT,
             snapshot_date TEXT,
-            time_range TEXT
+            time_range TEXT,
+            UNIQUE(track_name, artist_name, snapshot_date, time_range)
         )
     """)
     cur.execute("""
@@ -26,7 +27,8 @@ def init_db():
             artist_name TEXT,
             genres TEXT,
             snapshot_date TEXT,
-            time_range TEXT
+            time_range TEXT,
+            UNIQUE(artist_name, snapshot_date, time_range)
         )
     """)
     cur.execute("""
@@ -34,7 +36,8 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             track_name TEXT,
             artist_name TEXT,
-            played_at TEXT
+            played_at TEXT,
+            UNIQUE(track_name, artist_name, played_at)
         )
     """)
     conn.commit()
@@ -46,7 +49,7 @@ def save_top_tracks(tracks, time_range="medium_term"):
     snapshot_date = datetime.now().strftime("%Y-%m-%d")
     for t in tracks:
         cur.execute(
-            "INSERT INTO top_tracks (track_name, artist_name, snapshot_date, time_range) VALUES (?, ?, ?, ?)",
+            "INSERT OR IGNORE INTO top_tracks (track_name, artist_name, snapshot_date, time_range) VALUES (?, ?, ?, ?)",
             (t["name"], t["artists"][0]["name"], snapshot_date, time_range)
         )
     conn.commit()
@@ -59,7 +62,7 @@ def save_top_artists(artists, time_range="medium_term"):
     for a in artists:
         genres = ", ".join(a.get("genres", []))
         cur.execute(
-            "INSERT INTO top_artists (artist_name, genres, snapshot_date, time_range) VALUES (?, ?, ?, ?)",
+            "INSERT OR IGNORE INTO top_artists (artist_name, genres, snapshot_date, time_range) VALUES (?, ?, ?, ?)",
             (a["name"], genres, snapshot_date, time_range)
         )
     conn.commit()
@@ -71,7 +74,7 @@ def save_recently_played(items):
     for item in items:
         track = item["track"]
         cur.execute(
-            "INSERT INTO recently_played (track_name, artist_name, played_at) VALUES (?, ?, ?)",
+            "INSERT OR IGNORE INTO recently_played (track_name, artist_name, played_at) VALUES (?, ?, ?)",
             (track["name"], track["artists"][0]["name"], item["played_at"])
         )
     conn.commit()
