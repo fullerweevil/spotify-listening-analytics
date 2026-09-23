@@ -3,5 +3,7 @@ __pycache__/
 venv/
 .env
 data/*.db
+logs/*.log
 .DS_Store
 .streamlit/secrets.toml
+.cache
