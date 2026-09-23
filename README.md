@@ -1,6 +1,6 @@
 # Spotify Listening Analytics
 
-A personal data project that tracks and visualizes my Spotify listening habits over time — top artists, top tracks, genre trends, and listening frequency — using the Spotify Web API, Python, and a Streamlit dashboard.
+A personal data project that tracks and visualizes my Spotify listening habits over time: top artists, top tracks, genre trends, and listening frequency, using the Spotify Web API, Python, and a Streamlit dashboard.
 
 ## Why This Project
 
